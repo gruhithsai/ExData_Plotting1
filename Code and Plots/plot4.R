@@ -1,0 +1,21 @@
+plot4 <- function(){
+  data <- read.table("household_power_consumption.txt", header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".")
+  subSetData <- data[data$Date %in% c("1/2/2007","2/2/2007") ,]
+  datetime <- strptime(paste(subSetData$Date, subSetData$Time, sep=" "), "%d/%m/%Y %H:%M:%S") 
+  globalActivePower <- as.numeric(subSetData$Global_active_power)
+  sub_metering_1 <- as.numeric(subSetData$Sub_metering_1)
+  sub_metering_2 <- as.numeric(subSetData$Sub_metering_2)
+  sub_metering_3 <- as.numeric(subSetData$Sub_metering_3)
+  Global_reactive_power <- as.numeric(subSetData$Global_reactive_power)
+  voltage <- as.numeric(subSetData$Voltage)
+  png("plot4.png",width = 480, height = 480)
+  par(mfrow = c(2,2))
+  plot(datetime,globalActivePower, type="l", main="Global Active Power", ylab="Global Active Power", xlab = "")
+  plot(datetime,voltage,type = 'l')
+  plot(datetime,sub_metering_1,xlab="",ylab = "Energy sub metering",type = "l")
+  lines(datetime,sub_metering_2,col = "red")
+  lines(datetime,sub_metering_3,col = "blue")
+  legend("topright",legend = c("sub_metering_1","sub_metering_2","sub_metering_3"),lty = 1,col =c("black","red","blue"))
+  plot(datetime,Global_reactive_power,type = "l")
+  dev.off()
+}
